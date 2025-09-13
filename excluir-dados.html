@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exclusão de Dados</title>
+</head>
+<body>
+    <h1>Exclusão de Dados do Usuário</h1>
+    <p>Informe seu nome de usuário para excluir seus dados do sistema:</p>
+    
+    <form id="deleteForm">
+        <input type="text" id="usuario" name="usuario" placeholder="Seu usuário" required>
+        <button type="submit">Excluir Meus Dados</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script>
+        const form = document.getElementById('deleteForm');
+        const message = document.getElementById('message');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const usuario = document.getElementById('usuario').value;
+
+            try {
+                const response = await fetch('excluir-dados.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario })
+                });
+
+                const result = await response.json();
+                message.textContent = result.success ? 'Seus dados foram excluídos com sucesso.' : 'Erro: ' + result.message;
+            } catch (err) {
+                message.textContent = 'Erro ao tentar excluir os dados.';
+            }
+        });
+    </script>
+</body>
+</html>
